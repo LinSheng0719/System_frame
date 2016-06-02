@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ls.web.business.test.dao.TestDao">
+	
+	<!-- 插入 -->
+    <insert id="insert" parameterType="map">
+        insert into org_host_ip
+            (
+                host_id,
+                platform_uuid,
+                org_uuid,
+                host_ip,
+                host_mac
+            )values(
+                #{host_id},
+                #{platform_uuid},
+                #{org_uuid},
+                #{host_ip},
+                #{host_mac}
+            )
+    </insert>
+
+    <!-- 通过主键删除 -->
+    <delete id="deleteById" parameterType="String">
+        delete from org_host_ip where host_id = #{host_id}
+    </delete>
+
+	<!-- 更新 -->
+    <update id="update" parameterType="map">
+        update org_host_ip set
+            host_id = #{host_id},
+            platform_uuid = #{platform_uuid},
+            org_uuid = #{org_uuid},
+            host_ip = #{host_ip},
+            host_mac = #{host_mac}
+        where host_id = #{host_id}
+    </update>
+
+    <!-- 通过主键编号获得map对象 -->
+    <select id="getMapByMap" resultType="map" useCache="false" parameterType="map">
+        select * from org_host_ip 
+        where host_mac = #{host_mac}
+        and host_ip = #{host_ip}
+    </select>
+
+
+    <!-- 查询列表 -->
+    <select id="queryList" resultType="hashmap" useCache="false" parameterType="map">
+        select
+            host_id,
+            platform_uuid,
+            org_uuid,
+            host_ip,
+            host_mac
+        from org_host_ip where 1=1 
+        <if test="platform_uuid != null and platform_uuid != ''">
+            and platform_uuid = #{platform_uuid}
+        </if>
+        <if test="platform_uuid_like != null and platform_uuid_like != ''">
+            and platform_uuid like CONCAT('%',#{platform_uuid_like},'%')
+        </if>
+        <if test="org_uuid != null and org_uuid != ''">
+            and org_uuid = #{org_uuid}
+        </if>
+        <if test="org_uuid_like != null and org_uuid_like != ''">
+            and org_uuid like CONCAT('%',#{org_uuid_like},'%')
+        </if>
+        <if test="host_ip != null and host_ip != ''">
+            and host_ip = #{host_ip}
+        </if>
+        <if test="host_ip_like != null and host_ip_like != ''">
+            and host_ip like CONCAT('%',#{host_ip_like},'%')
+        </if>
+        <if test="host_mac != null and host_mac != ''">
+            and host_mac = #{host_mac}
+        </if>
+        <if test="host_mac_like != null and host_mac_like != ''">
+            and host_mac like CONCAT('%',#{host_mac_like},'%')
+        </if>
+    </select>
+
+    <!-- 获得分页列表 -->
+    <select id="queryPageList" resultType="hashmap" useCache="false" parameterType="map">
+        select
+            host_id,
+            platform_uuid,
+            org_uuid,
+            host_ip,
+            host_mac
+        from org_host_ip where 1=1 
+        <if test="platform_uuid != null and platform_uuid != ''">
+            and platform_uuid = #{platform_uuid}
+        </if>
+        <if test="platform_uuid_like != null and platform_uuid_like != ''">
+            and platform_uuid like CONCAT('%',#{platform_uuid_like},'%')
+        </if>
+        <if test="org_uuid != null and org_uuid != ''">
+            and org_uuid = #{org_uuid}
+        </if>
+        <if test="org_uuid_like != null and org_uuid_like != ''">
+            and org_uuid like CONCAT('%',#{org_uuid_like},'%')
+        </if>
+        <if test="host_ip != null and host_ip != ''">
+            and host_ip = #{host_ip}
+        </if>
+        <if test="host_ip_like != null and host_ip_like != ''">
+            and host_ip like CONCAT('%',#{host_ip_like},'%')
+        </if>
+        <if test="host_mac != null and host_mac != ''">
+            and host_mac = #{host_mac}
+        </if>
+        <if test="host_mac_like != null and host_mac_like != ''">
+            and host_mac like CONCAT('%',#{host_mac_like},'%')
+        </if>
+        limit #{start},#{limit}
+    </select>
+</mapper>

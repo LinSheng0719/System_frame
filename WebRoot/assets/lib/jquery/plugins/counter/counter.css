@@ -1,0 +1,9 @@
+/* 默认主题 */
+.default-counter i {
+	width: 15px;
+	height: 20px;
+	display: inline-block;
+	background: url(images/number.png) no-repeat;
+	background-position: 0 0;
+	text-indent: -999em;
+}
