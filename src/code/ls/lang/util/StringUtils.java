@@ -1,15 +1,6 @@
 package code.ls.lang.util;
 
 
-/**
- * @Title: StringUtils.java
- * @Package com.ls.common.string
- * @Description:
- * @author linsheng
- * @email hi.linsheng@foxmail.com
- * @date 2016年5月13日 下午5:23:11
- * @version V1.0
- */
 public class StringUtils {
 
 	public static boolean isEmpty(String value) {

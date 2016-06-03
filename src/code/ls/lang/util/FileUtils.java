@@ -22,15 +22,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-/**
- * @author linsheng
- * @version V1.0
- * @Title: FileUtils.java
- * @Package com.ls.test.utils
- * @Description:
- * @email hi.linsheng@foxmail.com
- * @date 2015年11月11日 下午2:32:41
- */
+
 public class FileUtils {
 
     public static final String ENCODING_UTF8 = "UTF-8";
@@ -42,55 +34,63 @@ public class FileUtils {
     public static final String ENCODING_GBK = "GBK";
 
     /**
-     * @param @param path
-     * @return String
-     * @Title:formatFilePath
-     * @Description:格式化文件路径
+     * @param path 文件路径
+     * @return 格式化的文件路径
      */
     public static String formatFilePath(String path) {
         return Paths.get(path).toString();
     }
 
     /**
-     * @param @param  file
-     * @param @param  encoding
-     * @param @throws UnsupportedEncodingException
-     * @param @throws FileNotFoundException
-     * @return BufferedReader
-     * @Title:newBufferedReader
-     * @Description:新建bufferedReader
+     * @param file     读取的文件
+     * @param encoding 读取的编码方式
+     * @return BufferedReader   文件字符流
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
      */
     private static BufferedReader newBufferedReader(File file, String encoding) throws UnsupportedEncodingException, FileNotFoundException {
         return new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
     }
 
+    /**
+     * @param file 读取的文件
+     * @return BufferedReader 文件字符流，采用utf8的编码读取方式
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     * @see FileUtils#newBufferedReader(File, String)
+     */
     private static BufferedReader newBufferedReader(File file) throws UnsupportedEncodingException, FileNotFoundException {
-        return new BufferedReader(new InputStreamReader(new FileInputStream(file), ENCODING_UTF8));
+        return newBufferedReader(file, ENCODING_UTF8);
     }
 
     /**
-     * @param @param  file
-     * @param @param  encoding
-     * @param @param  append
-     * @param @throws IOException
-     * @return BufferedWriter
-     * @Title:newBufferedWriter
-     * @Description:新建BufferedWriter
+     * @param file     写入的文件
+     * @param encoding 写入的编码
+     * @param append   是否以添加方式增加文件内容
+     * @return 文件写入流
+     * @throws IOException
      */
     private static BufferedWriter newBufferedWriter(File file, String encoding, boolean append) throws IOException {
         return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), encoding));
     }
 
+    /**
+     * 默认编码utf8
+     *
+     * @param file   写入的文件
+     * @param append 是否以添加方式增加文件内容
+     * @return 文件写入流
+     * @throws IOException
+     * @see FileUtils#newBufferedWriter(File, String, boolean)
+     */
     private static BufferedWriter newBufferedWriter(File file, boolean append) throws IOException {
-        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, append), ENCODING_UTF8));
+        return newBufferedWriter(file, ENCODING_UTF8, append);
     }
 
     /**
-     * @param @param  file
-     * @param @throws IOException
-     * @return String
-     * @Title:getFileEncoding
-     * @Description:获取文件编码
+     * @param file 文件
+     * @return String 文件的编码
+     * @throws IOException
      */
     public static String getFileEncoding(File file) throws IOException {
 
@@ -110,18 +110,16 @@ public class FileUtils {
             default:
                 encoding = ENCODING_GBK;
         }
-        if (bis != null)
-            bis.close();
+        bis.close();
         return encoding;
     }
 
     /**
-     * @param @param   file
-     * @param @returnS
-     * @param @throws  IOException
-     * @return List<String>
-     * @Title:readTextFileOutList
-     * @Description:读取小文件文本，返回List
+     * 读取文本<p>
+     * 根据换行分割
+     *
+     * @param file 文件
+     * @throws IOException
      */
     public static List<String> readTextFileOutList(File file) throws IOException {
         try (BufferedReader reader = newBufferedReader(file)) {
@@ -130,12 +128,9 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  file
-     * @param @param  encoding
-     * @param @throws IOException
-     * @return List<String>
-     * @Title:readTextFileOutList
-     * @Description:读取返回List
+     * @param file     文件
+     * @param encoding 编码
+     * @throws IOException
      */
     public static List<String> readTextFileOutList(File file, String encoding) throws IOException {
         try (BufferedReader reader = newBufferedReader(file, encoding)) {
@@ -143,6 +138,14 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 根据<code>BufferReader</code>读取文本
+     * <p>
+     * 以换行分割
+     *
+     * @param reader 读取的<code>BufferdReader</code>
+     * @throws IOException
+     */
     private static List<String> setDataList(BufferedReader reader) throws IOException {
         List<String> result = new ArrayList<>();
         String line = null;
@@ -153,12 +156,10 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  file
-     * @param @return
-     * @param @throws IOException
-     * @return String
-     * @Title:readTextFileOutString
-     * @Description:读取小文本，返回String
+     * 读取全部文本
+     *
+     * @param file 文件
+     * @throws IOException
      */
     public static String readTextFileOutString(File file) throws IOException {
         try (BufferedReader reader = newBufferedReader(file)) {
@@ -167,12 +168,11 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  file
-     * @param @param  encoding
-     * @param @throws IOException
-     * @return String
-     * @Title:readTextFileOutString
-     * @Description:读取返回String
+     * 根据编码读取文本
+     *
+     * @param file     文本
+     * @param encoding 编码
+     * @throws IOException
      */
     public static String readTextFileOutString(File file, String encoding) throws IOException {
         try (BufferedReader reader = newBufferedReader(file, encoding)) {
@@ -180,6 +180,12 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 将读取流转换为文本
+     *
+     * @param reader 读取的文本流
+     * @throws IOException
+     */
     private static String setDataString(BufferedReader reader) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line = null;
@@ -190,42 +196,38 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  is
-     * @param @return
-     * @param @throws IOException
-     * @return byte[]
-     * @Title:readStream
-     * @Description: 获取文件字节流
+     * 以字节方式读取文件
+     *
+     * @param file 文件
+     * @throws IOException
      */
     public static byte[] readFileOutByte(File file) throws IOException {
         return readFileOutByte(new FileInputStream(file));
     }
 
     /**
-     * @param @param  is
-     * @param @return
-     * @param @throws IOException
-     * @return byte[]
-     * @Title:readFileOutByte
-     * @Description:获取文件字节流
+     * 以字节的方式读取流
+     *
+     * @param is 输入流
+     * @throws IOException
      */
     public static byte[] readFileOutByte(InputStream is) throws IOException {
         try (BufferedInputStream bis = new BufferedInputStream(is)) {
             byte[] b = new byte[bis.available()];
-            bis.read(b, 0, b.length);
-            return b;
+            int len = bis.read(b, 0, b.length);
+            if (len == b.length)
+                return b;
+            return null;
         }
     }
 
 
     /**
-     * @param @param  sourceFile
-     * @param @param  targetFile
-     * @param @return
-     * @param @throws IOException
-     * @return boolean
-     * @Title:writeFileByteByFile
-     * @Description:文件写入文件
+     * 将文件内容写入另一个文件
+     *
+     * @param sourceFile 源文件
+     * @param targetFile 目标文件
+     * @throws IOException
      */
     public static boolean writeFileByteByFile(File sourceFile, File targetFile) throws IOException {
 
@@ -239,85 +241,115 @@ public class FileUtils {
         return true;
     }
 
+    /**
+     * 将文件内容写入另一个文件
+     *
+     * @param sourceFile 源文件位置
+     * @param targetFile 目标文件位置
+     * @throws IOException
+     */
     public static boolean writeFileByteByFile(String sourceFile, String targetFile) throws IOException {
         return writeFileByteByFile(new File(sourceFile), new File(targetFile));
     }
 
     /**
-     * @param @param  temp
-     * @param @param  file
-     * @param @return
-     * @param @throws IOException
-     * @return boolean
-     * @Title:writeFileByteByByte
-     * @Description: 字节写入文件
+     * 将字节流写入文件
+     *
+     * @param bytes 字节流
+     * @param file  目标文件
+     * @throws IOException
      */
-    public static boolean writeFileByteByByte(byte[] temp, File file) throws IOException {
+    public static boolean writeFileByteByByte(byte[] bytes, File file) throws IOException {
 
         try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
-            bos.write(temp, 0, temp.length);
+            bos.write(bytes, 0, bytes.length);
             bos.flush();
             return true;
         }
     }
 
     /**
-     * @param @param  content
-     * @param @param  file
-     * @param @param  encoding
-     * @param @throws IOException
-     * @return boolean
-     * @Title:wrieteTextAppend
-     * @Description:追加方式添加文件
+     * 将文本以追加方式加入文本
+     *
+     * @param content  要追加的文本
+     * @param file     目标文件
+     * @param encoding 编码方式
+     * @throws IOException
      */
     public static boolean writeTextAppend(String content, File file, String encoding) throws IOException {
         return writeTextFile(content, file, encoding, true);
     }
 
+    /**
+     * 将文本以追加方式加入文本,默认编码
+     *
+     * @param content 要追加的文本
+     * @param file    目标文件
+     * @throws IOException
+     */
     public static boolean writeTextAppend(String content, File file) throws IOException {
         return writeTextFile(content, file, true);
     }
 
     /**
-     * @param @param  content
-     * @param @param  file
-     * @param @param  encoding
-     * @param @throws IOException
-     * @return boolean
-     * @Title:wrieteTextNew
-     * @Description:覆盖方式添加文件
+     * 将文本以覆盖方式加入文本
+     *
+     * @param content  要追加的文本
+     * @param file     目标文件
+     * @param encoding 编码方式
+     * @throws IOException
      */
     public static boolean writeTextNew(String content, File file, String encoding) throws IOException {
         return writeTextFile(content, file, encoding, false);
     }
 
+    /**
+     * 将文本以覆盖方式加入文本，默认编码
+     *
+     * @param content 要追加的文本
+     * @param file    目标文件
+     * @throws IOException
+     */
     public static boolean writeTextNew(String content, File file) throws IOException {
         return writeTextFile(content, file, false);
     }
 
     /**
-     * @param @param  content
-     * @param @param  file
-     * @param @param  append
-     * @param @return
-     * @param @throws IOException
-     * @return boolean
-     * @Title:writeTextFile
-     * @Description:文本写入文本文件
+     * 将文本加入文件
+     *
+     * @param content  加入的文本
+     * @param file     目标文件
+     * @param encoding 编码
+     * @param append   是否追加
+     * @throws IOException
      */
     public static boolean writeTextFile(String content, File file, String encoding, boolean append) throws IOException {
-
-        try (BufferedWriter bufferWritter = newBufferedWriter(file, encoding, append)) {
-            return writeText(bufferWritter, content);
+        try (BufferedWriter bufferedWriter = newBufferedWriter(file, encoding, append)) {
+            return writeText(bufferedWriter, content);
         }
     }
 
+    /**
+     * 将文本加入文件,默认编码
+     *
+     * @param content 加入的文本
+     * @param file    目标文件
+     * @param append  是否追加
+     * @throws IOException
+     */
     public static boolean writeTextFile(String content, File file, boolean append) throws IOException {
-        try (BufferedWriter bufferWritter = newBufferedWriter(file, append)) {
-            return writeText(bufferWritter, content);
+        try (BufferedWriter bufferedWriter = newBufferedWriter(file, append)) {
+            return writeText(bufferedWriter, content);
         }
     }
 
+    /**
+     * 文本写入写入流
+     *
+     * @param bufferWritter 写入流
+     * @param content       文本
+     * @throws IOException
+     */
     private static boolean writeText(BufferedWriter bufferWritter, String content) throws IOException {
         bufferWritter.write(content);
         bufferWritter.flush();
@@ -325,43 +357,30 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  dir
-     * @param @throws IOException
-     * @return boolean
-     * @Title:createDir
-     * @Description:创建文件夹
+     * 创建文件夹
+     *
+     * @param dir 文件夹
+     * @throws IOException
      */
     public static boolean createDir(File dir) throws IOException {
-
-        if (!dir.exists()) {
-            return dir.mkdirs();
-        }
-        return true;
+        return dir.exists() || dir.mkdirs();
     }
 
     /**
-     * @param @param file
-     * @return void
+     * 创建文件
+     *
+     * @param file 文件
      * @throws IOException
-     * @Title:createFile
-     * @Description:创建文件
      */
     public static boolean createFile(File file) throws IOException {
-
-        if (!file.exists()) {
-            if (createDir(file.getParentFile()))
-                return file.createNewFile();
-            return false;
-        }
-        return true;
+        return file.exists() || createDir(file.getParentFile()) && file.createNewFile();
     }
 
 
     /**
-     * @param @param file
-     * @return boolean
-     * @Title:deleteFolder
-     * @Description:删除文件夹
+     * 删除文件夹，及其包含的文件
+     *
+     * @param file 文件夹
      */
     public static boolean deleteFolder(File file) {
 
@@ -374,18 +393,14 @@ public class FileUtils {
                 }
             }
         }
-        if (file.exists()) {
-            return file.delete();
-        }
-        return false;
+        return file.exists() && file.delete();
     }
 
     /**
-     * @param @param file
-     * @param @param newName
-     * @return boolean
-     * @Title:reNameFile
-     * @Description:重命名文件
+     * 重命名文件
+     *
+     * @param file    文件
+     * @param newName 新名称
      */
     public static boolean reNameFile(File file, String newName) {
 
@@ -396,12 +411,10 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  source
-     * @param @param  target
-     * @param @return
-     * @return boolean
-     * @Title:moveFile
-     * @Description:移动文件
+     * 移动文件
+     *
+     * @param source 源文件
+     * @param target 目标文件名
      */
     public static boolean moveFile(File source, File target) {
         if (!source.exists())
@@ -416,13 +429,11 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  source
-     * @param @param  target
-     * @param @return
-     * @param @throws IOException
-     * @return boolean
-     * @Title:copyFile
-     * @Description:
+     * 复制文件
+     *
+     * @param source 源文件
+     * @param target 目标文件
+     * @throws IOException
      */
     public static boolean copy(File source, File target) throws IOException {
 
@@ -439,12 +450,11 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  source
-     * @param @param  target
-     * @param @throws IOException
-     * @return boolean
-     * @Title:copyFile
-     * @Description:复制文件
+     * 复制单文件
+     *
+     * @param source 源文件
+     * @param target 目标文件
+     * @throws IOException
      */
     public static boolean copyFile(File source, File target) throws IOException {
 
@@ -460,12 +470,11 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  sourceFolder
-     * @param @param  targetFolder
-     * @param @throws IOException
-     * @return boolean
-     * @Title:copyFolder
-     * @Description:复制文件夹
+     * 复制文件夹
+     *
+     * @param sourceFolder 源文件夹
+     * @param targetFolder 目标文件夹
+     * @throws IOException
      */
     public static boolean copyFolder(File sourceFolder, File targetFolder) throws IOException {
 
@@ -485,16 +494,14 @@ public class FileUtils {
                 copyFile(file, targetFile);
             }
         }
-
         return true;
     }
 
     /**
-     * @param @param  file
-     * @param @return
-     * @return long
-     * @Title:getFolderLength
-     * @Description:获取文件夹大小
+     * 获取文件或者文件夹大小
+     *
+     * @param file 文件或者文件夹
+     * @return <code>long</code>类型值，计算的是文件的字节长度
      */
     public static long getFolderLength(File file) {
 
@@ -509,14 +516,16 @@ public class FileUtils {
     }
 
     /**
-     * @param @param  fileSize
-     * @param @return
-     * @return String
-     * @Title:formatFileSize
-     * @Description:文件大小格式转化
+     * 文件大小格式转化
+     * <p>
+     * 最小单位为B，最大为GB
+     * <p>
+     * 单位从小到达有  B   KB  MB  GB
+     *
+     * @param fileSize 文件大小
      */
     public static String formatFileSize(long fileSize) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         DecimalFormat df = new DecimalFormat("0.00");
         if (fileSize < 1024) {
             sb.append(fileSize);
@@ -538,20 +547,19 @@ public class FileUtils {
     }
 
     /**
-     * @param @File imageFile
-     * @return boolean
-     * @throws
-     * @MethodName: isImage
-     * @Description: 判断图片
+     * 判断输入流是不是图片类型
+     *
+     * @param in 输入流
+     * @return true 是图片
+     * <p>
+     * false 不是图片
      */
     public static boolean isImg(InputStream in) {
 
-        Image img = null;
+        Image img;
         try {
             img = ImageIO.read(in);
-            if (img == null || img.getWidth(null) <= 0 || img.getHeight(null) <= 0)
-                return false;
-            return true;
+            return !(img == null || img.getWidth(null) <= 0 || img.getHeight(null) <= 0);
         } catch (IOException e) {
             return false;
         } finally {
@@ -559,23 +567,14 @@ public class FileUtils {
         }
     }
 
-    public static boolean isImg(File file) {
-
-        if (!file.exists())
-            return false;
-
-        Image img = null;
-        try {
-            InputStream in = new FileInputStream(file);
-            img = ImageIO.read(in);
-            in.close();
-            if (img == null || img.getWidth(null) <= 0 || img.getHeight(null) <= 0)
-                return false;
-            return true;
-        } catch (IOException e) {
-            return false;
-        } finally {
-            img = null;
+    /**
+     * 判断文件是不是图片
+     *
+     * @param file 文件
+     */
+    public static boolean isImg(File file) throws IOException {
+        try (FileInputStream in = new FileInputStream(file)) {
+            return isImg(in);
         }
     }
 }
